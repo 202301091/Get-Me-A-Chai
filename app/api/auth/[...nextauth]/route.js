@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 // import AppleProvider from 'next-auth/providers/apple'
 // import FacebookProvider from 'next-auth/providers/facebook'
-// import GoogleProvider from 'next-auth/providers/google'
+ import GoogleProvider from 'next-auth/providers/google'
 // import EmailProvider from 'next-auth/providers/email'
 import GitHubProvider from "next-auth/providers/github";
 import mongoose from "mongoose";
@@ -25,10 +25,10 @@ export const authoptions =  NextAuth({
     //     clientId: process.env.FACEBOOK_ID,
     //     clientSecret: process.env.FACEBOOK_SECRET
     //   }),
-    //   GoogleProvider({
-    //     clientId: process.env.GOOGLE_ID,
-    //     clientSecret: process.env.GOOGLE_SECRET
-    //   }),
+      GoogleProvider({
+        clientId: process.env.GOOGLE_ID,
+        clientSecret: process.env.GOOGLE_SECRET
+      }),
     //   // Passwordless / email sign in
     //   EmailProvider({
     //     server: process.env.MAIL_SERVER,
@@ -37,7 +37,7 @@ export const authoptions =  NextAuth({
     ],
     callbacks: {
       async signIn({ user, account, profile, email, credentials }) {
-         if(account.provider == "github") { 
+        
           await connectDb()
           // Check if the user already exists in the database
           const currentUser =  await User.findOne({email: email}) 
@@ -48,10 +48,12 @@ export const authoptions =  NextAuth({
              const newUser = await User.create({
               email: user.email, 
               username: user.email.split("@")[0], 
+              profilepic:"https://avatars.githubusercontent.com/u/583231?v=4",
+              coverpic:"https://timelinecovers.pro/facebook-cover/download/beautiful_sunset-facebook-cover.jpg"
             })   
           }
           return true
-         }
+        
       },
       
       async session({ session, user, token }) {

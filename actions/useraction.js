@@ -5,10 +5,10 @@ import connectDb from "@/db/connectDb"
 import User from "@/models/User"
 export const initiate = async (amount, to_username, paymentform) => {
     await connectDb()
-     // fetch the secret of the user who is getting the payment 
-    let user = await User.findOne({username: to_username})
+    // fetch the secret of the user who is getting the payment 
+    let user = await User.findOne({ username: to_username })
     const secret = user.razorpaysecret
-    var instance = new Razorpay({ key_id:user.razorpayid, key_secret: secret })
+    var instance = new Razorpay({ key_id: user.razorpayid, key_secret: secret })
 
 
 
@@ -20,13 +20,13 @@ export const initiate = async (amount, to_username, paymentform) => {
     let x = await instance.orders.create(Options)
 
     //create a payment object which shows a pending payment in the dtabase
-   await Payment.create({
-  oid: x.id,
-  amount: amount / 100,
-  to_user: to_username,
-  name: paymentform.name,
-  message: paymentform.message,
-});
+    await Payment.create({
+        oid: x.id,
+        amount: amount / 100,
+        to_user: to_username,
+        name: paymentform.name,
+        message: paymentform.message,
+    });
 
 
     return x
@@ -34,17 +34,35 @@ export const initiate = async (amount, to_username, paymentform) => {
 
 export const fetchuser = async (username) => {
     await connectDb()
-    let u = await User.findOne({ username: username })
-    let user = u.toObject({ flattenObjectIds: true })
-    return user
+    let u = await User.findOne({ username: username }).lean()
+
+    if (!u) return null
+
+    return {
+        ...u,
+        _id: u._id.toString(),
+        createdAt: u.createdAt?.toISOString?.(),
+        updatedAt: u.updatedAt?.toISOString?.()
+    }
 }
 
+
 export const fetchpayments = async (username) => {
+    console.log("Requested")
     await connectDb()
-    // find all payments sorted by decreasing order of amount and flatten object ids
-    let p = await Payment.find({ to_user: username, done:true }).sort({ amount: -1 }).limit(10).lean()
-    return p
+    let payments = await Payment.find({ to_user: username, done: true })
+        .sort({ amount: -1 })
+        .limit(10)
+        .lean()
+
+    return payments.map(p => ({
+        ...p,
+        _id: p._id.toString(),
+        createdAt: p.createdAt?.toISOString?.(),
+        updatedAt: p.updatedAt?.toISOString?.(),
+    }))
 }
+
 
 export const updateProfile = async (data, oldusername) => {
     await connectDb()
@@ -55,15 +73,15 @@ export const updateProfile = async (data, oldusername) => {
         let u = await User.findOne({ username: ndata.username })
         if (u) {
             return { error: "Username already exists" }
-        }   
-        await User.updateOne({email: ndata.email}, ndata)
+        }
+        await User.updateOne({ email: ndata.email }, ndata)
         // Now update all the usernames in the Payments table 
-        await Payment.updateMany({to_user: oldusername}, {to_user: ndata.username})
-        
-    }
-    else{
+        await Payment.updateMany({ to_user: oldusername }, { to_user: ndata.username })
 
-        
-        await User.updateOne({email: ndata.email}, ndata)
+    }
+    else {
+
+
+        await User.updateOne({ email: ndata.email }, ndata)
     }
 }

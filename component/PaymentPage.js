@@ -12,46 +12,54 @@ import { notFound } from "next/navigation"
 // import payments from 'razorpay/dist/types/payments'
 
 
-const PaymentPage = ({ username }) => {
+const PaymentPage = ({username}) => {
     const { data: session } = useSession()
-    const [paymentform, setpaymentform] = useState({name:"",message:"",amount:""})
+    const [paymentform, setpaymentform] = useState({ name: "", message: "", amount: "" })
     const [currentuser, setcurrentuser] = useState({})
     const [Payments, setPayments] = useState([])
-    const searchParams=useSearchParams()
-    const router=useRouter();
+    const searchParams = useSearchParams()
+    const router = useRouter();
     const handlechange = (e) => {
         setpaymentform({ ...paymentform, [e.target.name]: e.target.value })
     }
 
     useEffect(() => {
-            getData();
-           if (!session) {
-             router.push('/login');
-           } 
-         }, [session,router]);
+        getData();
+        //    if (!session) {
+        //      router.push('/login');
+        //    } 
+    }, [router]);
 
     useEffect(() => {
         if (searchParams.get("paymentdone") == "true") {
-           toast('Thanks for your donation!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
+            toast('Thanks for your donation!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
             });
         }
         router.push(`/${username}`);
-            
-        
+
+
 
     }, [])
     const getData = async () => {
-        let u = await fetchuser(username);
+        console.log("YES")
+       user()
+       payment()
+    }
+
+    const user=async()=>{
+         let u = await fetchuser(username);
         setcurrentuser(u)
+    }
+    const payment=async ()=>{
         let dbpayments = await fetchpayments(username)
         setPayments(dbpayments);
     }
@@ -85,7 +93,7 @@ const PaymentPage = ({ username }) => {
 
     }
 
-    
+
     return (
         <>
             <ToastContainer
@@ -102,53 +110,27 @@ const PaymentPage = ({ username }) => {
             {/* Same as */}
             <ToastContainer />
             <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
-            <Script>
-                {`var options = {
-                    "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
-                "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                "currency": "INR",
-                "name": "Acme Corp", //your business name
-                "deScription": "Test Transaction",
-                "image": "https://example.com/your_logo",
-                "order_id": "order_9A33XWu170gUtm", 
-                "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
-                "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-                "name": "Gaurav Kumar", //your customer's name
-                "email": "gaurav.kumar@example.com",
-                "contact": "9000090000" //Provide the customer's phone number for better conversion rates },
-                "notes": {
-                    "address": "Razorpay Corporate Office"},
-                "theme": {
-                    "color": "#3399cc"
-                        }
-                 };
-                var rzp1 = new Razorpay(options);
-                document.getElementById('rzp-button1').onclick = function(e){
-                    rzp1.open();
-                e.preventDefault();
-}`}
-            </Script>
             <div className="cover w-full bg-red-50 relative">
                 <img className='object-cover w-full h-[350]' src={currentuser.coverpic} alt="" />
                 <div className='absolute -bottom-36 flex flex-col items-center justify-center right-[25%] sm:right-[40%] md:right-[44%] '>
-                    <img  width={100} height={100} className=' border-2 border-white rounded-lg' src={currentuser.profilepic} alt="" />
-                
-           
-           
-                <div className=' flex gap-1 flex-col justify-center items-center'>
-                <div className='font-bold text-lg'>
-                    @{username}
+                    <img width={100} height={100} className=' border-2 border-white rounded-lg' src={currentuser.profilepic} alt="" />
+
+
+
+                    <div className=' flex gap-1 flex-col justify-center items-center'>
+                        <div className='font-bold text-lg text-white'>
+                            @{username}
+                        </div>
+                        <div className='text-slate-400'>
+                            Lets help {username} get a chai!
+                        </div>
+                        <div className='text-slate-400 mb-2'>
+                            {Payments.length} Payments.  ₹{Payments.reduce((a, b) => a + b.amount, 0)} raised
+                        </div>
+                    </div>
                 </div>
-                <div className='text-slate-400'>
-                    Lets help {username} get a chai!
-                </div>
-                <div className='text-slate-400 mb-2'>
-                    {Payments.length} Payments.  ₹{Payments.reduce((a, b) => a + b.amount, 0)} raised
-                </div>
-                </div>
-                 </div>
-                 </div>
-                 <div className="info flex gap-1 flex-col justify-center items-center mt-44 ">
+            </div>
+            <div className="info flex gap-1 flex-col justify-center items-center mt-44 ">
                 <div className="payment w-[90%]  flex flex-col items-center md:items-start md:flex-row gap-3">
                     <div className="supporters min-h-[200px] md:min-h-[400px] w-full md:w-1/2 bg-slate-800 rounded-lg text-white p-5 mb-10">
                         {/* Show List of all the supporters s a leaderboard  */}
@@ -157,17 +139,17 @@ const PaymentPage = ({ username }) => {
                             {Payments.length == 0 && <><h3 className='text-lg font-semibold'>No Payment Recived</h3>
                             </>}
                             {Payments.map((p, i) => {
-                                return <><li className='my-2 flex gap-2 items-center'>
-                                    <img className='w-10 h-10' src="/avatar.gif" alt="" />
-                                    <span>
-                                        {p.name} denoted <span className='font-bold'>${p.amount}</span> with a message "{p.message}"
-                                    </span>
-                                </li>
-                                </>
+                                return (
+                                    <React.Fragment key={i}>
+                                        <li className="my-2 flex gap-2 items-center">
+                                            <img className="w-10 h-10" src="/avatar.gif" alt="" />
+                                            <span>
+                                                {p.name} doneted <span className="font-bold">${p.amount}</span> with a message "{p.message}"
+                                            </span>
+                                        </li>
+                                    </React.Fragment>
+                                )
                             })}
-
-
-
                         </ul>
                     </div>
                     <div className="makePayment w-full md:w-1/2 bg-slate-800 rounded-lg text-white p-5 mb-10">

@@ -35,7 +35,9 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+## Imprtant For Use This Project
 
+Create a .env.local file by copying .env.example. Then, replace the placeholder values in .env.local with your actual values.
 ## Imprtant For Use This Project
 
 Create a .env.local file by copying .env.example. Then, replace the placeholder values in .env.local with your actual values.

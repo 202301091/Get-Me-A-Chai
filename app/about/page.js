@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Image from 'next/image';
 const about = () => {
     return (
         <div className="container mx-auto px-8 md:px-4 py-8 text-white">
@@ -11,14 +11,14 @@ const about = () => {
             <h2 className="text-2xl font-semibold mb-4">How It Works</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div className="flex items-center mb-6">
-                    <img className="w-20 h-20 rounded-full mr-4" src="/group.gif" alt="Fans Want to Collaborate" />
+                    <Image className="w-20 h-20 rounded-full mr-4" height={40} width={80} src="/group.gif" alt="Fans Want to Collaborate" />
                     <div>
                         <h3 className="text-xl font-semibold mb-2">Fans Want to Collaborate</h3>
                         <p>Your fans are enthusiastic about collaborating with you on your projects.</p>
                     </div>
                 </div>
                 <div className="flex items-center mb-6">
-                    <img className="w-20 h-20 rounded-full mr-4" src="/coin.gif" alt="Support Through Chai" />
+                    <Image className="w-20 h-20 rounded-full mr-4" height={40} width={80} src="/coin.gif" alt="Support Through Chai" />
                     <div>
                         <h3 className="text-xl font-semibold mb-2">Support Through Chai</h3>
                         <p>Receive support from your fans in the form of chai purchases, directly contributing to your project funding.</p>

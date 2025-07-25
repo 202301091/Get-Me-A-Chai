@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <div className="flex justify-center flex-col gap-2 pt-10 pb-5 px-3 items-center text-center text-white">
-        <div className="font-bold text-3xl flex gap-2 justify-center items-center">Buy Me a Chai <span><img className="invertImg" src="/tea.gif" width={50} alt="" /></span></div>
+        <div className="font-bold text-3xl flex gap-2 justify-center items-center">Buy Me a Chai <span><Image className="invertImg" src="/tea.gif" height={50} width={50} alt="" /></span></div>
         <p>A crowdfunding for creators. Get funded by ypur fans and followers. Start now!</p>
         <div>
           <Link href={"/login"}><button type="button" className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Start Here</button></Link>
@@ -17,17 +17,17 @@ export default function Home() {
         <h2 className="font-bold text-3xl text-center my-5">Your Fans can buy you a chai</h2>
         <div className="flex flex-col sm:flex-row gap-5 text-center justify-around">
           <div className="item space-y-2 flex flex-col items-center justify-center">
-            <img className=" bg-slate-400 rounded-full p-2 text-black" width={80} src="/man.gif" alt="" />
+            <Image className=" bg-slate-400 rounded-full p-2 text-black" height={40} width={80} src="/man.gif" alt="" />
             <p className="font-bold">Your Fans want to help</p>
             <p className=" text-center">Your fans are available for you</p>
           </div>
           <div className="item space-y-2 flex flex-col items-center justify-center">
-            <img className=" bg-slate-400 rounded-full p-2 text-black" width={80} src="/coin.gif" alt="" />
+            <Image className=" bg-slate-400 rounded-full p-2 text-black"  height={40} width={80} src="/coin.gif" alt="" />
             <p className="font-bold">Your Fans want to give money</p>
             <p className=" text-center">Your fans are available for giving money</p>
           </div>
           <div className="item space-y-2 flex flex-col items-center justify-center">
-            <img className=" bg-slate-400 rounded-full p-2 text-black" width={80} src="/group.gif" alt="" />
+            <Image className=" bg-slate-400 rounded-full p-2 text-black" height={40} width={80} src="/group.gif" alt="" />
             <p className="font-bold">Your Fans want to help</p>
             <p className=" text-center">Your fans are available for you</p>
           </div>

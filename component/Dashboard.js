@@ -27,7 +27,7 @@ const page = () => {
       }
 
       const handlesubmit=async (e)=>{
-         update()
+        //  update()
          let a=await updateProfile(e,session.user.name);
          toast('Your profile is updated', {
                      position: "top-right",
